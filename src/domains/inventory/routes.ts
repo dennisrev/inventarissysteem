@@ -1,4 +1,5 @@
 import Overview from "./pages/Overview.vue";
+import Create from "./pages/Create.vue";
 
 export const routes = [
     {
@@ -9,5 +10,10 @@ export const routes = [
         path: '/products',
         name: 'overview',
         component: Overview
+    },
+    {
+        path: '/products/create',
+        name: 'create',
+        component: Create
     },
 ];
