@@ -2,8 +2,11 @@
 
 import ProductForm from '../components/ProductForm.vue';
 
-import type { ProductItem } from '../store.ts';
-import { addProduct } from '../store.ts';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+import type { ProductItem } from '../store';
+import { addProduct } from '../store';
 
 const product: ProductItem = {
     name: '',
@@ -11,11 +14,17 @@ const product: ProductItem = {
     minimumAmount: 0
 };
 
+const handleCreateProductItem = (addedProduct: ProductItem) => {
+    addProduct(addedProduct);
+    router.push('/products');
+};
+
 </script>
 
 <template>
 
     <h2>Product toevoegen</h2>
-    <ProductForm :product="product" @submit="addProduct" />
+    <ProductForm :product="product" :does-exist="false" @submit="handleCreateProductItem" />
+    <RouterLink to="/products">Annuleren</RouterLink>
 
 </template>

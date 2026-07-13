@@ -6,7 +6,7 @@ export interface ProductItem {
     minimumAmount: number;
 };
 
-interface ProductItemWithId extends ProductItem {
+export interface ProductItemWithId extends ProductItem {
     id: number;
 };
 
@@ -22,8 +22,30 @@ const products = ref<ProductItemWithId[]>([
 
 export const getAllProducts = computed(() => products.value);
 
-export const addProduct = (product: ProductItemWithId) => {
-    const maxId = products.value.reduce((max, productItem) => (productItem.id > max ? productItem.id : max), 1);
-    product.id = maxId + 1;
-    products.value.push(product);
+export const getLowStockProducts = computed(() => products.value.filter(product => product.actualAmount < product.minimumAmount) );
+
+export const getProductById = (id: number) => computed(() => products.value.find(product => product.id === id));
+
+export const updateActualAmount = (id: number, newActualAmount: number) => {
+    const productIndex = products.value.findIndex(productItem => productItem.id === id);
+    if (productIndex !== -1) {
+        products.value[productIndex].actualAmount = newActualAmount;
+    };
+};
+
+export const updateProduct = (product: ProductItemWithId) => {
+    const productIndex = products.value.findIndex(productItem => productItem.id === product.id);
+    if (productIndex !== -1) {
+        products.value.splice(productIndex, 1, product);
+    };
+};
+
+export const addProduct = (product: ProductItem) => {
+    const maxId = products.value.reduce((max, productItem) => (productItem.id > max ? productItem.id : max), 0);
+
+    const newProduct: ProductItemWithId = {
+        ...product,
+        id: maxId + 1
+    };
+    products.value.push(newProduct);
 };

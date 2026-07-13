@@ -4,23 +4,26 @@ import { reactive } from 'vue';
 
 import type { ProductItem } from '../store';
 
-const props = defineProps({
-    product: Object
-});
+const props = defineProps<{
+    product: ProductItem
+    doesExist?: boolean
+}>();
+
+const emit = defineEmits<{
+    (event: 'submit', product: ProductItem): void
+}>();
 
 const productTemp  = reactive<ProductItem>({
     name: props.product.name,
-    actualAmount: props.product.actualAmountAmount,
+    actualAmount: props.product.actualAmount,
     minimumAmount: props.product.minimumAmount
 });
 
-const emit = defineEmits(['submit']);
-
 const saveGrocery = () => {
      emit('submit', {
-        name: groceryTemp.name,
-        price: groceryTemp.price,
-        quantity: groceryTemp.quantity
+        name: productTemp.name,
+        actualAmount: productTemp.actualAmount,
+        minimumAmount: productTemp.minimumAmount
      });
 };
 
@@ -33,25 +36,27 @@ const saveGrocery = () => {
   <table align="center">
     <thead>
         <tr>
-            <td colspan="2">Product toevoegen/bewerken</td>
+            <td colspan="2">
+                Product {{ props.doesExist ? "bewerken" : "toevoegen" }}
+            </td>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Naam</td>
-            <td> <input v-model="groceryTemp.name" type="text"/> </td>
+            <td>Naam product</td>
+            <td> <input v-model="productTemp.name" type="text"/> </td>
         </tr>
         <tr>
-            <td>Prijs</td>
-            <td> <input v-model="groceryTemp.price" type="number"/> </td>
+            <td>Aantal aanwezig</td>
+            <td> <input v-model.number="productTemp.actualAmount" type="number"/> </td>
         </tr>
         <tr>
-            <td>Hoeveelheid</td>
-            <td> <input v-model="groceryTemp.quantity" type="number"/> </td>
+            <td>Aantal vereist</td>
+            <td> <input v-model.number="productTemp.minimumAmount" type="number"/> </td>
         </tr>
     </tbody>
   </table>
-  <button @click="saveGrocery">Opslaan</button>
+  <button @click="saveGrocery">{{ props.doesExist ? "Aanpassen" : "Toevoegen" }}</button>
 
 </div>
 
