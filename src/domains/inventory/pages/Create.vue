@@ -24,7 +24,7 @@ const handleCreateProductItem = (addedProduct: ProductItem) => {
 <template>
 
     <h2>Product toevoegen</h2>
-    <ProductForm :product="product" :does-exist="false" @submit="handleCreateProductItem" />
+    <ProductForm :product="product" button-text="Toevoegen" @submit="handleCreateProductItem" />
     <RouterLink to="/products">Annuleren</RouterLink>
 
 </template>

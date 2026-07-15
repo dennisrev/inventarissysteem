@@ -3,27 +3,24 @@
 import ProductForm from '../components/ProductForm.vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import type { ProductItem, ProductItemWithId } from '../store';
+import type { ProductItem } from '../store';
 import { getProductById, updateProduct } from '../store';
 
 const route = useRoute();
 const router = useRouter();
 
-const productwithId = getProductById(Number(route.params.id)).value as ProductItemWithId;
-const { id, ...product } = productwithId;
+const productWithId = getProductById(Number(route.params.id));
 
 const handleUpdateProductItem = (updatedProduct: ProductItem) => {
-    const updatedProductWithId = { id, ...updatedProduct };
-    updateProduct(updatedProductWithId);
+    updateProduct(Number(route.params.id), updatedProduct);
     router.push('/products');
 };
-
 </script>
 
 <template>
 
     <h2>Product bewerken</h2>
-    <ProductForm :product="product" :does-exist="true" @submit="handleUpdateProductItem" />
+    <ProductForm v-if="productWithId" :product="productWithId" button-text="Aanpassen" @submit="handleUpdateProductItem" />
     <RouterLink to="/products">Annuleren</RouterLink>
 
 </template>

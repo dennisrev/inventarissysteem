@@ -33,10 +33,14 @@ export const updateActualAmount = (id: number, newActualAmount: number) => {
     };
 };
 
-export const updateProduct = (product: ProductItemWithId) => {
-    const productIndex = products.value.findIndex(productItem => productItem.id === product.id);
+export const updateProduct = (id: number, product: ProductItem) => {
+    const productIndex = products.value.findIndex(productItem => productItem.id === id);
+    const updatedProduct: ProductItemWithId = {
+        ...product,
+        id: id
+    };
     if (productIndex !== -1) {
-        products.value.splice(productIndex, 1, product);
+        products.value.splice(productIndex, 1, updatedProduct);
     };
 };
 
